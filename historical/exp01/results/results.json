@@ -1,0 +1,186 @@
+{
+  "config": {
+    "dataset": "synthetic",
+    "data": "",
+    "output": "results",
+    "device": "mps",
+    "image_size": 64,
+    "batch_size": 64,
+    "workers": 0,
+    "seed": 42,
+    "synthetic_train": 2400,
+    "synthetic_val": 600,
+    "synthetic_test": 800,
+    "expert_epochs": 6,
+    "expert_lr": 0.002,
+    "global_epochs": 3,
+    "global_lr": 0.08,
+    "meta_episodes": 220,
+    "support_size": 16,
+    "query_size": 32,
+    "inner_steps": 1,
+    "inner_lr": 0.08,
+    "meta_lr": 0.001,
+    "log_every": 20,
+    "k_shots": [
+      2,
+      4,
+      8,
+      16,
+      32
+    ],
+    "test_adapt_steps": 8,
+    "test_adapt_lr": 0.04
+  },
+  "experts": [
+    "rgb",
+    "edge",
+    "highpass",
+    "chroma"
+  ],
+  "results": [
+    {
+      "corruption": "clean",
+      "method": "uniform",
+      "k_shot": 0,
+      "accuracy": 1.0,
+      "loss": 0.08602251589298249,
+      "mean_weights": [
+        0.25,
+        0.25,
+        0.25,
+        0.25
+      ]
+    },
+    {
+      "corruption": "clean",
+      "method": "global",
+      "k_shot": 0,
+      "accuracy": 1.0,
+      "loss": 0.0005354271456599236,
+      "mean_weights": [
+        0.21930661797523499,
+        0.6903752088546753,
+        0.05930658429861069,
+        0.03101152926683426
+      ]
+    },
+    {
+      "corruption": "clean",
+      "method": "adaptive_zero_shot",
+      "k_shot": 0,
+      "accuracy": 1.0,
+      "loss": 0.00021184810320846738,
+      "mean_weights": [
+        0.0011377250775694847,
+        0.9215071797370911,
+        0.07705391198396683,
+        0.00030112324748188257
+      ]
+    },
+    {
+      "corruption": "glasses",
+      "method": "uniform",
+      "k_shot": 0,
+      "accuracy": 1.0,
+      "loss": 0.28657292246818544,
+      "mean_weights": [
+        0.25,
+        0.25,
+        0.25,
+        0.25
+      ]
+    },
+    {
+      "corruption": "glasses",
+      "method": "global",
+      "k_shot": 0,
+      "accuracy": 1.0,
+      "loss": 0.004959406331181526,
+      "mean_weights": [
+        0.21930661797523499,
+        0.6903752088546753,
+        0.05930658429861069,
+        0.03101152926683426
+      ]
+    },
+    {
+      "corruption": "glasses",
+      "method": "adaptive_zero_shot",
+      "k_shot": 0,
+      "accuracy": 1.0,
+      "loss": 0.0023280256986618043,
+      "mean_weights": [
+        0.0017455044435337186,
+        0.9275561571121216,
+        0.07026173919439316,
+        0.00043657617061398923
+      ]
+    },
+    {
+      "corruption": "glasses",
+      "method": "adaptive_few_shot",
+      "k_shot": 2,
+      "accuracy": 1.0,
+      "loss": 0.0021676896863563316,
+      "mean_weights": [
+        0.0016927216202020645,
+        0.9338150024414062,
+        0.06407216936349869,
+        0.0004201313713565469
+      ]
+    },
+    {
+      "corruption": "glasses",
+      "method": "adaptive_few_shot",
+      "k_shot": 4,
+      "accuracy": 1.0,
+      "loss": 0.002160003670870359,
+      "mean_weights": [
+        0.0016900391783565283,
+        0.9341259598731995,
+        0.06376469880342484,
+        0.00041929539293050766
+      ]
+    },
+    {
+      "corruption": "glasses",
+      "method": "adaptive_few_shot",
+      "k_shot": 8,
+      "accuracy": 1.0,
+      "loss": 0.002159010454297367,
+      "mean_weights": [
+        0.001689763506874442,
+        0.9341558814048767,
+        0.06373514980077744,
+        0.0004192151827737689
+      ]
+    },
+    {
+      "corruption": "glasses",
+      "method": "adaptive_few_shot",
+      "k_shot": 16,
+      "accuracy": 1.0,
+      "loss": 0.0021583122410336318,
+      "mean_weights": [
+        0.0016896454617381096,
+        0.9341627359390259,
+        0.06372838467359543,
+        0.0004191882035229355
+      ]
+    },
+    {
+      "corruption": "glasses",
+      "method": "adaptive_few_shot",
+      "k_shot": 32,
+      "accuracy": 1.0,
+      "loss": 0.002162769145797938,
+      "mean_weights": [
+        0.001690894947387278,
+        0.93403559923172,
+        0.06385394185781479,
+        0.00041955639608204365
+      ]
+    }
+  ]
+}
