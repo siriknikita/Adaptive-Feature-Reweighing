@@ -1,0 +1,19 @@
+
+[project]
+name = "recoverable-feature-routing-exp6"
+version = "0.6.0"
+description = "Experiment #6: real-data recoverable feature routing pilot for T4/Colab"
+requires-python = ">=3.11"
+dependencies = [
+  "torch>=2.3",
+  "torchvision>=0.18",
+  "datasets>=3.0",
+  "numpy>=1.26",
+  "pandas>=2.0",
+  "scikit-learn>=1.4",
+  "pillow>=10.0",
+  "pyarrow>=15.0",
+]
+
+[tool.uv]
+package = false
