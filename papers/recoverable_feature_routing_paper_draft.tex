@@ -1,0 +1,239 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,booktabs,array,microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{siunitx}
+
+\title{Recoverable Feature Routing under Distribution Shift:\\
+A Controlled Study of Gradient Accessibility and Selective Fast Adaptation}
+\author{Anonymous draft}
+\date{October 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Neural classifiers commonly learn to prioritize features that are most predictive on the training distribution. This is efficient when feature reliability is stable, but it can become brittle when a dominant feature fails while lower-priority evidence remains informative. We study this failure mode in a controlled synthetic image setting containing three explicitly isolated evidence families: a dominant but fragile eye-region cue, a weaker lower-face geometric cue, and a weaker chromatic cue. A held-out glasses perturbation invalidates the dominant cue without removing the two backup cues. Across five seeds, fixed global fusion falls to 0.5000 accuracy under this shift, while a few-shot adaptive router recovers to $0.6302 \pm 0.1064$ at 8 shots. However, recovery is seed-dependent because some routers become effectively locked to the failed feature. Anti-saturation transformations reduce apparent output collapse but do not consistently restore adaptation, showing that nonzero routing mass is not equivalent to gradient accessibility. An independent fast routing path raises held-out accuracy to $0.6986 \pm 0.0259$ at 32 shots, but applying the fast policy globally reduces clean accuracy to 0.7158. A learned slow-fast mixture instead retains 0.9974 clean accuracy at its best clean-preserving operating point but recovers less of the shifted regime. These results motivate a stability-plasticity formulation in which recoverability requires both an independent adaptation path and a mechanism for selectively invoking it. We therefore introduce a support-keyed selective fast-path experiment that conditions fast-path activation on similarity to a newly observed regime while preserving the original slow policy for familiar inputs.
+\end{abstract}
+
+\section{Introduction}
+
+Feature selection is usually discussed as a question of global utility: features that contribute strongly across a dataset are preserved or amplified, while weak features are downweighted, pruned, or ignored. This view is reasonable when feature reliability is approximately stationary. It is less satisfactory when a feature that is weak on average becomes useful for a specific input regime, or when the feature that is normally strongest becomes unreliable.
+
+The motivating example is deepfake detection. A detector may learn to rely strongly on a particular family of texture, frequency, chromatic, geometric, or localized facial cues. An intervention such as eyewear, occlusion, compression, or a generator-specific artifact can alter the reliability of one family without destroying all remaining evidence. In such a case, the desired behavior is not necessarily permanent retraining. The model should be able to temporarily reconsider which evidence it trusts.
+
+This paper isolates that mechanism in a deliberately controlled synthetic setting before attempting a full deepfake benchmark. The experiments are built around three questions:
+\begin{enumerate}[leftmargin=*]
+    \item Can globally weak evidence remain useful after the dominant feature fails?
+    \item If useful backup evidence still exists, can an adaptive router recover access to it?
+    \item If a fully independent fast path restores adaptation but damages old-distribution performance, can that path be invoked selectively?
+\end{enumerate}
+
+The central distinction that emerges is between \emph{feature retention} and \emph{feature recoverability}. A representation may still exist in the model and may even retain nonzero routing probability, yet remain functionally inaccessible to rapid adaptation because the routing map has entered a low-gradient state.
+
+\section{Related Work}
+
+\subsection{Conditional computation and mixture-of-experts routing}
+
+Mixture-of-experts models use input-dependent gates to select or combine specialized subnetworks. Sparsely gated MoE layers demonstrated that conditional computation can increase model capacity without activating all parameters for every input~\cite{shazeer2017}. Switch Transformers later simplified sparse routing and highlighted training instabilities associated with learned expert selection~\cite{fedus2022}. Our setting is much smaller and uses routing as an instrument for studying recoverability rather than capacity scaling.
+
+\subsection{Few-shot and fast adaptation}
+
+Model-Agnostic Meta-Learning explicitly optimizes a model so that a small number of gradient steps on a new task can produce useful adaptation~\cite{finn2017}. Fast-weight approaches distinguish rapidly changing variables from slower learned parameters~\cite{ba2016}. Our experiments adopt this slow/fast distinction but focus on a different failure mode: a fast update can itself be ineffective if its gradient must pass through a saturated slow routing map.
+
+\subsection{Test-time adaptation and stability-plasticity}
+
+Tent adapts model parameters at inference time under distribution shift~\cite{wang2021}. Continual-learning work studies the complementary problem of learning new behavior while retaining previous capabilities. Elastic Weight Consolidation preserves old-task behavior by constraining changes to important parameters~\cite{kirkpatrick2017}. Our setting exposes a local version of the same stability-plasticity tension.
+
+\section{Controlled Experimental Setting}
+
+\subsection{Evidence families}
+
+Each synthetic image contains three separately accessible evidence families. \textbf{A} is a nearly deterministic eye-region cue and is dominant on clean data. \textbf{B} is a lower-face geometric cue correlated with the label with probability 0.72. \textbf{C} is a chromatic cue correlated with the label with probability 0.66.
+
+Three small convolutional experts receive isolated feature views: the eye band, grayscale lower-face geometry, and opponent-color channels.
+
+\subsection{Held-out intervention}
+
+A synthetic glasses overlay is held out from slow-router training. It invalidates A while leaving B and C largely intact. The slow router is meta-trained on clean inputs, eye-region masking, lower-face masking, desaturation, blur, and JPEG compression.
+
+\subsection{Evaluation}
+
+The main runs use seeds 11, 22, 33, 44, and 55. Few-shot support sizes are 2, 4, 8, 16, and 32. Support samples are excluded from query evaluation.
+
+\section{Experiments}
+
+\subsection{Experiment 1: overly easy toy world}
+
+The first construction used RGB, edge, high-pass, and chromatic experts. All fusion strategies achieved 1.000 accuracy on both clean and glasses-corrupted data. The perturbation increased cross-entropy but left the edge cue sufficiently predictive that no meaningful adaptive behavior was required.
+
+\subsection{Experiment 2: fragile dominance and few-shot recovery}
+
+The revised construction forced a fragile dominant cue. Fixed global fusion fell to 0.5000 mean glasses accuracy across five seeds. The adaptive router reached $0.6302 \pm 0.1064$ at 8 shots, while a support-optimized fusion reference reached $0.6944 \pm 0.0302$ at 32 shots.
+
+\begin{table}[h]
+\centering
+\caption{Experiment 2 shifted-regime accuracy.}
+\begin{tabular}{lrr}
+\toprule
+Method & $K$ & Accuracy \\
+\midrule
+Global fixed fusion & 0 & $0.5000 \pm 0.0000$ \\
+Adaptive zero-shot & 0 & $0.5008 \pm 0.0016$ \\
+Adaptive few-shot & 2 & $0.5872 \pm 0.1052$ \\
+Adaptive few-shot & 8 & $\mathbf{0.6302 \pm 0.1064}$ \\
+Adaptive few-shot & 32 & $0.6300 \pm 0.1061$ \\
+Support-optimized fusion & 32 & $0.6944 \pm 0.0302$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+At 8 shots, mean routing changed from approximately
+\[
+[A,B,C]=[0.904,0.088,0.008]
+\]
+to
+\[
+[A,B,C]=[0.451,0.539,0.010].
+\]
+However, the high variance revealed seed-dependent routing lock-in.
+
+\subsection{Experiment 3: output anti-collapse is not gradient recoverability}
+
+Temperature scaling, epsilon floors, logit clipping, and bounded residual routing were compared with standard softmax. The epsilon floor eliminated measured output saturation but reached only $0.5444 \pm 0.0878$ at 32 shots. Logit clipping peaked at $0.5877 \pm 0.1074$, similar to standard softmax.
+
+For
+\[
+w_i=(1-E\epsilon)\operatorname{softmax}(z)_i+\epsilon,
+\]
+the output can be nonzero while the derivative with respect to $z_i$ remains controlled by the saturated softmax Jacobian. Thus nonzero routing mass is not equivalent to gradient access.
+
+\subsection{Experiment 4: independent fast pathways}
+
+Experiment 4 trained one shared slow router per seed and compared adaptation mechanisms on identical support/query splits.
+
+The independent mixture uses
+\[
+p_s=\operatorname{softmax}(z_s), \qquad
+p_f=\operatorname{softmax}(a),
+\]
+and
+\[
+w=(1-\alpha)p_s+\alpha p_f.
+\]
+
+\begin{table}[h]
+\centering
+\caption{Best operating point per Experiment 4 method.}
+\begin{tabular}{lrrr}
+\toprule
+Method & $K$ & Glasses & Clean after \\
+\midrule
+Slow SGD & 8 & $0.6302 \pm 0.1064$ & 0.9226 \\
+Additive fast & 8 & $0.6302 \pm 0.1064$ & 0.8668 \\
+Fixed mixture & 32 & $0.5657 \pm 0.0805$ & 1.0000 \\
+Learned mixture & 4 & $0.6070 \pm 0.0954$ & $\mathbf{0.9974}$ \\
+Fast only & 32 & $\mathbf{0.6986 \pm 0.0259}$ & 0.7158 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The independent fast route improved both mean shifted accuracy and seed stability. Its routing conductance at initialization was 0.4714, whereas the slow route was much smaller and approached zero on the most strongly locked seeds. The price of applying the fast route globally was a substantial clean-distribution degradation.
+
+\subsection{Experiment 5: support-keyed selective activation}
+
+Experiment 5 keeps the expert bank, slow router, support set, query set, and adapted fast policy fixed across activation methods. Only the rule for choosing the fast path changes.
+
+The final route is
+\[
+w(x)=(1-\alpha(x))p_s(x)+\alpha(x)p_f.
+\]
+
+The prototype switch uses a frozen context embedding $\phi(x)$:
+\[
+s(x)=
+\cos(\phi(x),\mu_{\mathrm{support}})
+-
+\cos(\phi(x),\mu_{\mathrm{clean}}).
+\]
+
+A second method fits a tiny linear environment classifier on the same frozen embeddings, with glasses support samples labeled as the new regime and 128 balanced clean reference samples labeled as the old regime. The switch does not receive fake/real targets.
+
+The principal joint metric is
+\[
+H=
+\frac{2A_{\mathrm{glasses}}A_{\mathrm{clean}}}
+{A_{\mathrm{glasses}}+A_{\mathrm{clean}}}.
+\]
+
+The implementation has been syntax checked and smoke tested. Full five-seed results have not yet been generated, so no Experiment 5 performance claim is made in this draft.
+
+\section{Interpretation}
+
+The experiments suggest a hierarchy of requirements.
+
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Feature presence is insufficient.} B and C can remain predictive while the shifted model fails.
+    \item \textbf{Nonzero routing weight is insufficient.} Probability floors can preserve mass without restoring useful gradients.
+    \item \textbf{Fresh parameters are insufficient if they inherit the saturated map.} Additive fast logits can remain trapped.
+    \item \textbf{Independent gradient access improves recoverability.} A separate fast distribution restores much of the lost adaptation.
+    \item \textbf{Independent access alone is insufficient for stability.} Applying the fast route indiscriminately damages familiar inputs.
+\end{enumerate}
+
+We call the combined goal \emph{recoverable feature routing}: preserving evidence, preserving an adaptation path to that evidence, and selectively invoking that path when the slow policy becomes unreliable.
+
+\section{Limitations}
+
+The current study is synthetic; it does not establish deepfake-detection performance. The glasses intervention is deterministic, the expert views are explicitly factorized, and adaptation uses labeled support examples. The experiments consider one dominant-feature failure at a time. Experiment 5 additionally retains a small clean reference memory, which should be compared with source-free alternatives.
+
+\section{Path to a Real Deepfake Study}
+
+A real follow-up should use identity-disjoint splits, generator-disjoint evaluation, natural glasses and sunglasses, generated eyewear interventions, compression and blur controls, and multiple measurable evidence families such as spatial texture, frequency residuals, chromatic statistics, geometry, and physically motivated cues.
+
+The target claim should remain mechanistic rather than benchmark-driven: determine whether a dominant cue becomes unreliable under a real condition, whether lower-priority cues remain informative, whether standard adaptation loses access to those cues, and whether an independent selective fast path restores them without degrading ordinary inputs.
+
+\section{Conclusion}
+
+A model can retain useful evidence while losing practical access to it through an overconfident routing policy. Output-level anti-collapse does not guarantee gradient accessibility. Independent fast routing substantially improves recovery under the controlled shift, but creates a stability-plasticity trade-off when applied globally. This motivates selective fast-path activation: an adaptive model should preserve an evidence path whose gradients are independent of the slow policy and invoke that path only when the current input resembles a regime in which the slow policy is unreliable.
+
+Experiment 5 directly tests this hypothesis.
+
+\begin{thebibliography}{9}
+
+\bibitem{shazeer2017}
+N. Shazeer, A. Mirhoseini, K. Maziarz, A. Davis, Q. V. Le, G. E. Hinton, and J. Dean,
+``Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer,''
+\emph{ICLR}, 2017.
+
+\bibitem{fedus2022}
+W. Fedus, B. Zoph, and N. Shazeer,
+``Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity,''
+\emph{Journal of Machine Learning Research}, vol. 23, no. 120, pp. 1--39, 2022.
+
+\bibitem{finn2017}
+C. Finn, P. Abbeel, and S. Levine,
+``Model-Agnostic Meta-Learning for Fast Adaptation of Deep Networks,''
+\emph{Proceedings of the 34th International Conference on Machine Learning},
+PMLR 70, pp. 1126--1135, 2017.
+
+\bibitem{ba2016}
+J. Ba, G. Hinton, V. Mnih, J. Z. Leibo, and C. Ionescu,
+``Using Fast Weights to Attend to the Recent Past,''
+\emph{Advances in Neural Information Processing Systems}, 2016.
+
+\bibitem{wang2021}
+D. Wang, E. Shelhamer, S. Liu, B. Olshausen, and T. Darrell,
+``Tent: Fully Test-Time Adaptation by Entropy Minimization,''
+\emph{International Conference on Learning Representations}, 2021.
+
+\bibitem{kirkpatrick2017}
+J. Kirkpatrick et al.,
+``Overcoming Catastrophic Forgetting in Neural Networks,''
+\emph{Proceedings of the National Academy of Sciences},
+vol. 114, no. 13, pp. 3521--3526, 2017.
+
+\end{thebibliography}
+
+\end{document}
