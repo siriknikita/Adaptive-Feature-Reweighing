@@ -1,0 +1,15 @@
+
+[project]
+name = "adaptive-feature-reweighting-exp3"
+version = "0.3.0"
+description = "Experiment #3: recoverability vs routing collapse ablation study"
+requires-python = ">=3.11"
+dependencies = [
+  "torch>=2.3",
+  "torchvision>=0.18",
+  "numpy>=1.26",
+  "pillow>=10.0",
+]
+
+[tool.uv]
+package = false
