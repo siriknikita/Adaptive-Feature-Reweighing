@@ -1,0 +1,417 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  10pt,
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Recoverable Feature Routing under Distribution Shift: Independent fast adaptation pathways},
+  pdfauthor={Mykyta Siryk},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Recoverable Feature Routing under Distribution Shift: Independent
+fast adaptation pathways}
+\author{Mykyta Siryk}
+\date{4 October 2026, 19:26 UTC}
+
+\begin{document}
+\maketitle
+
+\hypertarget{abstract}{%
+\subsubsection{Abstract}\label{abstract}}
+
+A separately parameterized fast routing distribution reaches 0.6986 +/-
+0.0259 glasses accuracy at 32 shots and reduces seed variance. Applying
+it globally lowers clean accuracy to 0.7158. Independent gradient access
+improves recoverability but introduces a stability-plasticity cost,
+motivating input-conditional activation.
+
+\hypertarget{historical-manuscript-status}{%
+\subsubsection{Historical Manuscript
+Status}\label{historical-manuscript-status}}
+
+This is the cumulative scientific manuscript at release \textbf{v0.4.0}.
+It includes only experiments completed by 4 October 2026, 19:26 UTC;
+later findings are intentionally absent.
+
+\hypertarget{introduction}{%
+\subsubsection{1. Introduction}\label{introduction}}
+
+Neural classifiers usually prioritize features that are most predictive
+across their training distribution. That behavior is efficient when
+feature reliability is stable, but brittle when a dominant cue fails
+while lower-priority evidence remains informative. The motivating
+deepfake-detection case is a model that trusts one family of texture,
+frequency, chromatic, geometric, or localized facial evidence until
+eyewear, occlusion, compression, or generator shift changes its
+reliability.
+
+The desired response is not necessarily permanent retraining. A system
+should reconsider which evidence it trusts for the affected regime while
+preserving its established behavior elsewhere. This manuscript records a
+sequence of controlled falsification experiments designed to separate
+apparent adaptation from actual access to neglected evidence.
+
+Each tagged version is a historical scientific snapshot. Negative
+results, implementation failures, and abandoned explanations are
+retained because they determine why the next experiment exists.
+
+\hypertarget{related-work}{%
+\subsubsection{2. Related Work}\label{related-work}}
+
+Mixture-of-experts systems use learned gates for input-dependent expert
+selection {[}1,2{]}. MAML and fast-weight systems formalize rapid
+adaptation {[}3,4{]}, while test-time adaptation and continual learning
+expose complementary distribution-shift and stability problems
+{[}5,6{]}. The present sequence isolates a narrower question: after a
+learned evidence policy becomes unreliable, does useful backup evidence
+remain both represented and reachable by a bounded adaptation process?
+
+\hypertarget{controlled-experimental-setting}{%
+\subsubsection{3. Controlled Experimental
+Setting}\label{controlled-experimental-setting}}
+
+\hypertarget{evidence-families}{%
+\paragraph{3.1 Evidence families}\label{evidence-families}}
+
+Each synthetic image belongs to one of two classes and contains three
+separately accessible evidence families:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{A: eye-region evidence.} A nearly deterministic localized
+  marker makes this the dominant cue on clean data.
+\item
+  \textbf{B: lower-face geometry.} A weaker geometric pattern is
+  correlated with the label with probability 0.72.
+\item
+  \textbf{C: chromatic evidence.} A weaker global color bias is
+  correlated with the label with probability 0.66.
+\end{itemize}
+
+Three small convolutional experts receive feature-isolated views. Expert
+A sees the eye band, expert B sees grayscale lower-face geometry, and
+expert C sees an opponent-color representation.
+
+The separation is intentional. It allows us to measure whether a model
+retains genuinely useful backup information after A fails, rather than
+inferring feature behavior from a monolithic latent representation.
+
+\hypertarget{held-out-intervention}{%
+\paragraph{3.2 Held-out intervention}\label{held-out-intervention}}
+
+The final intervention is a synthetic glasses overlay applied to the eye
+band. It is not used during slow-router training. The perturbation is
+designed to invalidate A while leaving B and C largely intact.
+
+The router is meta-trained on other perturbations, including eye-band
+masking, lower-face masking, desaturation, blur, JPEG compression, and
+clean inputs. Thus, the system is exposed to the general idea that
+evidence reliability can change, but it does not learn a direct
+glasses-specific rule.
+
+\hypertarget{evaluation-protocol}{%
+\paragraph{3.3 Evaluation protocol}\label{evaluation-protocol}}
+
+The principal runs use five seeds: 11, 22, 33, 44, and 55. Few-shot
+support sizes are 2, 4, 8, 16, and 32 labeled glasses examples. Support
+samples are excluded from query evaluation.
+
+The main metrics are shifted-regime accuracy, clean accuracy after
+adaptation, expert routing weights, routing entropy, and saturation
+rate. Later experiments add explicit measures of dominant-cue release,
+backup-cue recovery, routing Jacobian conductance, and initial
+backup-gradient magnitude.
+
+\hypertarget{experiments}{%
+\subsubsection{4. Experiments}\label{experiments}}
+
+\hypertarget{experiment-1-failure-of-an-overly-easy-toy-world}{%
+\paragraph{4.1 Experiment 1: failure of an overly easy toy
+world}\label{experiment-1-failure-of-an-overly-easy-toy-world}}
+
+The first toy construction contained RGB, edge, high-pass, and chromatic
+expert views. It failed as a falsification environment because all
+fusion strategies achieved 1.000 accuracy on both clean and
+glasses-corrupted data. The perturbation increased cross-entropy loss,
+but the edge expert remained sufficiently diagnostic that the router had
+no incentive to rediscover weak evidence.
+
+This negative result motivated a stricter construction in which the
+globally dominant feature is explicitly fragile.
+
+\hypertarget{experiment-2-fragile-dominance-and-few-shot-recovery}{%
+\paragraph{4.2 Experiment 2: fragile dominance and few-shot
+recovery}\label{experiment-2-fragile-dominance-and-few-shot-recovery}}
+
+Experiment 2 introduced evidence families A, B, and C. On clean data,
+the learned global fusion placed approximately 95.7\% of routing mass on
+A. Under glasses, the fixed global system fell to exactly 0.5000 mean
+accuracy across five seeds.
+
+The backup experts remained useful. Under glasses, B and C independently
+retained above-chance classification performance, while A collapsed to
+chance. A support-optimized fusion reference reached 0.6944 ± 0.0302
+accuracy at 32 shots.
+
+The adaptive router partially recovered:
+
+\begin{longtable}[]{@{}lrr@{}}
+\toprule\noalign{}
+Method & K & Glasses accuracy \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Global fixed fusion & 0 & 0.5000 ± 0.0000 \\
+Adaptive zero-shot & 0 & 0.5008 ± 0.0016 \\
+Adaptive few-shot & 2 & 0.5872 ± 0.1052 \\
+Adaptive few-shot & 8 & \textbf{0.6302 ± 0.1064} \\
+Adaptive few-shot & 32 & 0.6300 ± 0.1061 \\
+Support-optimized fusion reference & 32 & 0.6944 ± 0.0302 \\
+\end{longtable}
+
+At 8 shots, mean routing changed from approximately
+
+\[
+[A,B,C]=[0.904,0.088,0.008]
+\]
+
+before glasses-specific adaptation to
+
+\[
+[A,B,C]=[0.451,0.539,0.010].
+\]
+
+The mechanism therefore worked in aggregate, but the standard deviation
+was large. Inspection showed that some seeds escaped from A while others
+remained almost perfectly locked to it.
+
+\hypertarget{experiment-3-output-anti-collapse-is-not-gradient-recoverability}{%
+\paragraph{4.3 Experiment 3: output anti-collapse is not gradient
+recoverability}\label{experiment-3-output-anti-collapse-is-not-gradient-recoverability}}
+
+Experiment 3 compared ordinary softmax routing with temperature scaling,
+an epsilon probability floor, logit clipping, and bounded residual
+routing.
+
+The main result was negative but informative. An epsilon floor
+eliminated measured output saturation while improving glasses accuracy
+only to 0.5444 ± 0.0878 at 32 shots. Logit clipping reached 0.5877 ±
+0.1074 at 8 shots, similar to ordinary softmax. No anti-collapse
+transformation consistently eliminated the seed-dependent failure.
+
+This shows that a router can assign nonzero mass to a backup expert
+without making that expert meaningfully accessible to gradient-based
+adaptation. For an epsilon-floor transformation,
+
+\[
+w_i=(1-E\epsilon)\operatorname{softmax}(z)_i+\epsilon,
+\]
+
+the output probability may be bounded away from zero while the
+derivative with respect to the underlying logit remains proportional to
+the already saturated softmax derivative.
+
+The relevant property is therefore not merely whether \(w_i>0\), but
+whether the adaptation parameters retain sufficient local influence over
+\(w_i\).
+
+\hypertarget{experiment-4-independent-fast-pathways}{%
+\paragraph{4.4 Experiment 4: independent fast
+pathways}\label{experiment-4-independent-fast-pathways}}
+
+Experiment 4 directly tested this gradient-accessibility hypothesis. All
+methods within a seed shared the exact same expert bank, slow router,
+support set, and query set.
+
+A standard slow update and an additive fast-logit update both continue
+to route through the slow softmax geometry. In contrast, the independent
+mixture uses
+
+\[
+p_s=\operatorname{softmax}(z_s), \qquad
+p_f=\operatorname{softmax}(a),
+\]
+
+and
+
+\[
+w=(1-\alpha)p_s+\alpha p_f.
+\]
+
+The fast distribution therefore has a routing Jacobian independent of
+the slow distribution.
+
+The fast-only route produced the strongest shifted-regime recovery:
+
+\begin{longtable}[]{@{}lrrr@{}}
+\toprule\noalign{}
+Method & Best K & Glasses accuracy & Clean accuracy after adaptation \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Slow SGD & 8 & 0.6302 ± 0.1064 & 0.9226 \\
+Additive fast logits & 8 & 0.6302 ± 0.1064 & 0.8668 \\
+Fixed independent mixture & 32 & 0.5657 ± 0.0805 & 1.0000 \\
+Learned independent mixture & 4 & 0.6070 ± 0.0954 & \textbf{0.9974} \\
+Fast-only independent path & 32 & \textbf{0.6986 ± 0.0259} & 0.7158 \\
+\end{longtable}
+
+The fast-only route also had markedly lower variance than the slow
+adaptive router. Its initial routing conductance was 0.4714, compared
+with approximately 0.14 on average for the slow route and nearly zero on
+the most strongly locked seeds.
+
+These results support two conclusions.
+
+First, a fresh parameter vector is not sufficient by itself: if it is
+inserted before the same saturated softmax, adaptation can still fail.
+
+Second, a computationally independent fast distribution restores
+gradient access, but indiscriminate application of the fast policy
+creates forgetting on the clean regime.
+
+This produces a clear stability-plasticity frontier.
+
+\hypertarget{interpretation-at-this-milestone}{%
+\subsubsection{Interpretation at This
+Milestone}\label{interpretation-at-this-milestone}}
+
+Independent gradient access improves shifted recovery and variance, but
+indiscriminate activation damages the familiar regime. Recoverability
+must be paired with a selection mechanism.
+
+\hypertarget{reason-for-the-next-stage}{%
+\subsubsection{Reason for the Next
+Stage}\label{reason-for-the-next-stage}}
+
+The limitations and unresolved mechanism at this milestone directly
+motivate Experiment 5; the next tagged manuscript records that test
+rather than silently rewriting this version.
+
+\hypertarget{limitations-and-threats-to-validity}{%
+\subsubsection{Limitations and Threats to
+Validity}\label{limitations-and-threats-to-validity}}
+
+The controlled worlds are binary, visually regular, and explicitly
+factorized. The support sets are labeled, only five principal seeds are
+used after the first stages, and the synthetic glasses intervention may
+be easier to recognize than natural distribution shifts.
+Best-operating-point comparisons may benefit from multiple testing.
+Experiment 0 lacks raw result artifacts, while Experiment 6 lacks
+completed results. Executable smoke tests establish software integrity,
+not reproduction of full-scale scientific outcomes.
+
+\hypertarget{reproducibility-and-provenance}{%
+\subsubsection{Reproducibility and
+Provenance}\label{reproducibility-and-provenance}}
+
+The accompanying repository separates byte-preserved historical source
+and results from repaired runnable snapshots. Each runnable stage
+provides a \texttt{uv} environment, exact entrypoint, bounded smoke
+test, and validation record. Reconstructed proposal, implementation,
+results, and analysis commits preserve why the sequence changed.
+Numerical claims come from stored outputs unless explicitly marked
+reported-only or results-missing.
+
+\hypertarget{disclosure-of-ai-assistance}{%
+\subsubsection{Disclosure of AI
+Assistance}\label{disclosure-of-ai-assistance}}
+
+ChatGPT collaborated in experimental ideation, implementation drafting,
+debugging, interpretation, manuscript preparation, and archival
+reconstruction. Git commits credit ChatGPT through co-author trailers.
+The exact ChatGPT model identifiers and reasoning-effort settings used
+during the original 4 October 2026 experiment conversations were not
+exposed in the recovered metadata and have not been inferred. Mykyta
+Siryk remains responsible for reviewing the code, evidence, claims, and
+manuscript.
+
+\hypertarget{references}{%
+\subsubsection{References}\label{references}}
+
+{[}1{]} N. Shazeer, A. Mirhoseini, K. Maziarz, A. Davis, Q. V. Le, G. E.
+Hinton, and J. Dean, ``Outrageously Large Neural Networks: The
+Sparsely-Gated Mixture-of-Experts Layer,'' ICLR, 2017.
+
+{[}2{]} W. Fedus, B. Zoph, and N. Shazeer, ``Switch Transformers:
+Scaling to Trillion Parameter Models with Simple and Efficient
+Sparsity,'' Journal of Machine Learning Research, vol.~23, no. 120,
+pp.~1--39, 2022.
+
+{[}3{]} C. Finn, P. Abbeel, and S. Levine, ``Model-Agnostic
+Meta-Learning for Fast Adaptation of Deep Networks,'' Proceedings of the
+34th International Conference on Machine Learning, PMLR 70,
+pp.~1126--1135, 2017.
+
+{[}4{]} J. Ba, G. Hinton, V. Mnih, J. Z. Leibo, and C. Ionescu, ``Using
+Fast Weights to Attend to the Recent Past,'' Advances in Neural
+Information Processing Systems, 2016.
+
+{[}5{]} D. Wang, E. Shelhamer, S. Liu, B. Olshausen, and T. Darrell,
+``Tent: Fully Test-Time Adaptation by Entropy Minimization,''
+International Conference on Learning Representations, 2021.
+
+{[}6{]} J. Kirkpatrick et al., ``Overcoming Catastrophic Forgetting in
+Neural Networks,'' Proceedings of the National Academy of Sciences,
+vol.~114, no. 13, pp.~3521--3526, 2017.
+
+\end{document}
