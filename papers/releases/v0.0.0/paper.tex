@@ -1,0 +1,264 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  10pt,
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Recoverable Feature Routing under Distribution Shift: Dormant-feature adaptive re-weighting prototype},
+  pdfauthor={Mykyta Siryk},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Recoverable Feature Routing under Distribution Shift:
+Dormant-feature adaptive re-weighting prototype}
+\author{Mykyta Siryk}
+\date{4 October 2026, 18:28 UTC}
+
+\begin{document}
+\maketitle
+
+\hypertarget{abstract}{%
+\subsubsection{Abstract}\label{abstract}}
+
+A 32-dimensional synthetic task tests whether an input-conditioned judge
+can reactivate a normally dormant feature after globally strong evidence
+fails. The recovered conversation reports 59.27\% linear accuracy,
+52.47\% MLP accuracy, 80.10\% zero-shot adaptive accuracy, and 98.00\%
+four-shot adaptive accuracy. The gate assigned to feature 23 reportedly
+rises from 1.41 to 3.59. The raw result bundle was not recovered, so the
+numerical record is reported-only. The prototype motivates an
+image-derived falsification environment.
+
+\hypertarget{historical-manuscript-status}{%
+\subsubsection{Historical Manuscript
+Status}\label{historical-manuscript-status}}
+
+This is the cumulative scientific manuscript at release \textbf{v0.0.0}.
+It includes only experiments completed by 4 October 2026, 18:28 UTC;
+later findings are intentionally absent.
+
+\hypertarget{introduction}{%
+\subsubsection{1. Introduction}\label{introduction}}
+
+Neural classifiers usually prioritize features that are most predictive
+across their training distribution. That behavior is efficient when
+feature reliability is stable, but brittle when a dominant cue fails
+while lower-priority evidence remains informative. The motivating
+deepfake-detection case is a model that trusts one family of texture,
+frequency, chromatic, geometric, or localized facial evidence until
+eyewear, occlusion, compression, or generator shift changes its
+reliability.
+
+The desired response is not necessarily permanent retraining. A system
+should reconsider which evidence it trusts for the affected regime while
+preserving its established behavior elsewhere. This manuscript records a
+sequence of controlled falsification experiments designed to separate
+apparent adaptation from actual access to neglected evidence.
+
+Each tagged version is a historical scientific snapshot. Negative
+results, implementation failures, and abandoned explanations are
+retained because they determine why the next experiment exists.
+
+\hypertarget{related-work}{%
+\subsubsection{2. Related Work}\label{related-work}}
+
+Mixture-of-experts systems use learned gates for input-dependent expert
+selection {[}1,2{]}. MAML and fast-weight systems formalize rapid
+adaptation {[}3,4{]}, while test-time adaptation and continual learning
+expose complementary distribution-shift and stability problems
+{[}5,6{]}. The present sequence isolates a narrower question: after a
+learned evidence policy becomes unreliable, does useful backup evidence
+remain both represented and reachable by a bounded adaptation process?
+
+\hypertarget{dormant-feature-prototype}{%
+\subsubsection{3. Dormant-feature
+Prototype}\label{dormant-feature-prototype}}
+
+\hypertarget{hypothesis}{%
+\paragraph{3.1 Hypothesis}\label{hypothesis}}
+
+The initial hypothesis was that an input-conditioned judge could
+recognize that ordinary evidence had become unreliable and rapidly
+activate a feature that was globally weak but locally decisive. This was
+not posed as ordinary feature selection: the target behavior was
+conditional reconsideration of evidence after an unseen transformation.
+
+\hypertarget{construction}{%
+\paragraph{3.2 Construction}\label{construction}}
+
+The binary task used 32-dimensional samples. Features 0--5 were globally
+predictive. Features 20--23 were normally noise. Three transformation
+families appeared during training. A held-out transformation corrupted
+strong features 0 and 5 while making feature 23 predictive. Linear and
+multilayer baselines were compared with zero-shot adaptive gating and a
+few-shot gate-offset update.
+
+\hypertarget{recovered-results}{%
+\paragraph{3.3 Recovered results}\label{recovered-results}}
+
+\begin{longtable}[]{@{}lrl@{}}
+\toprule\noalign{}
+Method & Held-out accuracy & Evidence status \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Linear baseline & 0.5927 & reported-only \\
+MLP baseline & 0.5247 & reported-only \\
+Adaptive zero-shot & 0.8010 & reported-only \\
+Adaptive four-shot & \textbf{0.9800} & reported-only \\
+\end{longtable}
+
+The gate assigned to feature 23 reportedly increased from 1.41 to 3.59
+after four-shot adaptation. These values were recovered from the
+conversation, not an original result archive, and therefore are not
+treated as independently verified measurements.
+
+\hypertarget{scientific-decision}{%
+\paragraph{3.4 Scientific decision}\label{scientific-decision}}
+
+The prototype showed feasibility in a deliberately favorable world. It
+did not establish robustness, image-level applicability, or recovery
+under a genuinely difficult failure. The next experiment therefore moved
+to explicit image-derived evidence families and a held-out eyewear
+intervention.
+
+\hypertarget{interpretation-at-this-milestone}{%
+\subsubsection{Interpretation at This
+Milestone}\label{interpretation-at-this-milestone}}
+
+A dormant feature can be reactivated in a favorable construction, but
+the numerical evidence remains reported-only. The next stage must
+introduce image-derived evidence and a meaningful held-out intervention.
+
+\hypertarget{reason-for-the-next-stage}{%
+\subsubsection{Reason for the Next
+Stage}\label{reason-for-the-next-stage}}
+
+The limitations and unresolved mechanism at this milestone directly
+motivate Experiment 1; the next tagged manuscript records that test
+rather than silently rewriting this version.
+
+\hypertarget{limitations-and-threats-to-validity}{%
+\subsubsection{Limitations and Threats to
+Validity}\label{limitations-and-threats-to-validity}}
+
+The controlled worlds are binary, visually regular, and explicitly
+factorized. The support sets are labeled, only five principal seeds are
+used after the first stages, and the synthetic glasses intervention may
+be easier to recognize than natural distribution shifts.
+Best-operating-point comparisons may benefit from multiple testing.
+Experiment 0 lacks raw result artifacts, while Experiment 6 lacks
+completed results. Executable smoke tests establish software integrity,
+not reproduction of full-scale scientific outcomes.
+
+\hypertarget{reproducibility-and-provenance}{%
+\subsubsection{Reproducibility and
+Provenance}\label{reproducibility-and-provenance}}
+
+The accompanying repository separates byte-preserved historical source
+and results from repaired runnable snapshots. Each runnable stage
+provides a \texttt{uv} environment, exact entrypoint, bounded smoke
+test, and validation record. Reconstructed proposal, implementation,
+results, and analysis commits preserve why the sequence changed.
+Numerical claims come from stored outputs unless explicitly marked
+reported-only or results-missing.
+
+\hypertarget{disclosure-of-ai-assistance}{%
+\subsubsection{Disclosure of AI
+Assistance}\label{disclosure-of-ai-assistance}}
+
+ChatGPT collaborated in experimental ideation, implementation drafting,
+debugging, interpretation, manuscript preparation, and archival
+reconstruction. Git commits credit ChatGPT through co-author trailers.
+The exact ChatGPT model identifiers and reasoning-effort settings used
+during the original 4 October 2026 experiment conversations were not
+exposed in the recovered metadata and have not been inferred. Mykyta
+Siryk remains responsible for reviewing the code, evidence, claims, and
+manuscript.
+
+\hypertarget{references}{%
+\subsubsection{References}\label{references}}
+
+{[}1{]} N. Shazeer, A. Mirhoseini, K. Maziarz, A. Davis, Q. V. Le, G. E.
+Hinton, and J. Dean, ``Outrageously Large Neural Networks: The
+Sparsely-Gated Mixture-of-Experts Layer,'' ICLR, 2017.
+
+{[}2{]} W. Fedus, B. Zoph, and N. Shazeer, ``Switch Transformers:
+Scaling to Trillion Parameter Models with Simple and Efficient
+Sparsity,'' Journal of Machine Learning Research, vol.~23, no. 120,
+pp.~1--39, 2022.
+
+{[}3{]} C. Finn, P. Abbeel, and S. Levine, ``Model-Agnostic
+Meta-Learning for Fast Adaptation of Deep Networks,'' Proceedings of the
+34th International Conference on Machine Learning, PMLR 70,
+pp.~1126--1135, 2017.
+
+{[}4{]} J. Ba, G. Hinton, V. Mnih, J. Z. Leibo, and C. Ionescu, ``Using
+Fast Weights to Attend to the Recent Past,'' Advances in Neural
+Information Processing Systems, 2016.
+
+{[}5{]} D. Wang, E. Shelhamer, S. Liu, B. Olshausen, and T. Darrell,
+``Tent: Fully Test-Time Adaptation by Entropy Minimization,''
+International Conference on Learning Representations, 2021.
+
+{[}6{]} J. Kirkpatrick et al., ``Overcoming Catastrophic Forgetting in
+Neural Networks,'' Proceedings of the National Academy of Sciences,
+vol.~114, no. 13, pp.~3521--3526, 2017.
+
+\end{document}
