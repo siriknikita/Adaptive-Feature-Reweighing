@@ -1,0 +1,51 @@
+slow zero-shot glasses mean accuracy = 0.5008
+global glasses mean accuracy        = 0.5000
+
+SLOW_SGD
+k= 2 acc=0.5872±0.1052 gain=+0.0864 clean=0.8866 gradBC=4.309e-02 cond=1.384e-01 releaseA=+0.348 alpha=0.000
+k= 4 acc=0.5837±0.1026 gain=+0.0829 clean=0.9488 gradBC=1.568e-02 cond=1.421e-01 releaseA=+0.286 alpha=0.000
+k= 8 acc=0.6302±0.1064 gain=+0.1294 clean=0.9226 gradBC=1.078e-02 cond=1.411e-01 releaseA=+0.452 alpha=0.000
+k=16 acc=0.6297±0.1059 gain=+0.1289 clean=0.8924 gradBC=5.044e-03 cond=1.431e-01 releaseA=+0.424 alpha=0.000
+k=32 acc=0.6300±0.1061 gain=+0.1292 clean=0.8330 gradBC=2.689e-03 cond=1.416e-01 releaseA=+0.465 alpha=0.000
+
+ADDITIVE_FAST
+k= 2 acc=0.6186±0.0989 gain=+0.1178 clean=0.9154 gradBC=5.814e-02 cond=1.384e-01 releaseA=+0.482 alpha=0.000
+k= 4 acc=0.5817±0.1003 gain=+0.0809 clean=0.9444 gradBC=5.772e-02 cond=1.421e-01 releaseA=+0.344 alpha=0.000
+k= 8 acc=0.6302±0.1064 gain=+0.1294 clean=0.8668 gradBC=7.133e-02 cond=1.411e-01 releaseA=+0.485 alpha=0.000
+k=16 acc=0.6295±0.1057 gain=+0.1287 clean=0.9396 gradBC=6.347e-02 cond=1.431e-01 releaseA=+0.461 alpha=0.000
+k=32 acc=0.6300±0.1061 gain=+0.1292 clean=0.8822 gradBC=7.615e-02 cond=1.416e-01 releaseA=+0.489 alpha=0.000
+
+MIXTURE_FIXED
+k= 2 acc=0.5357±0.0609 gain=+0.0349 clean=0.9974 gradBC=8.533e-02 cond=2.357e-01 releaseA=+0.447 alpha=0.500
+k= 4 acc=0.5082±0.0101 gain=+0.0074 clean=1.0000 gradBC=7.551e-02 cond=2.357e-01 releaseA=+0.447 alpha=0.500
+k= 8 acc=0.5601±0.0736 gain=+0.0593 clean=0.9974 gradBC=7.079e-02 cond=2.357e-01 releaseA=+0.447 alpha=0.500
+k=16 acc=0.5386±0.0598 gain=+0.0378 clean=0.9974 gradBC=6.889e-02 cond=2.357e-01 releaseA=+0.447 alpha=0.500
+k=32 acc=0.5657±0.0805 gain=+0.0649 clean=1.0000 gradBC=6.853e-02 cond=2.357e-01 releaseA=+0.447 alpha=0.500
+
+MIXTURE_LEARNED
+k= 2 acc=0.5854±0.0729 gain=+0.0846 clean=0.9546 gradBC=1.884e-02 cond=4.714e-02 releaseA=+0.695 alpha=0.773
+k= 4 acc=0.6070±0.0954 gain=+0.1062 clean=0.9974 gradBC=1.699e-02 cond=4.714e-02 releaseA=+0.693 alpha=0.770
+k= 8 acc=0.6044±0.0784 gain=+0.1036 clean=0.9500 gradBC=1.586e-02 cond=4.714e-02 releaseA=+0.696 alpha=0.773
+k=16 acc=0.5935±0.0785 gain=+0.0927 clean=0.9588 gradBC=1.551e-02 cond=4.714e-02 releaseA=+0.694 alpha=0.770
+k=32 acc=0.5814±0.0883 gain=+0.0806 clean=0.9672 gradBC=1.545e-02 cond=4.714e-02 releaseA=+0.694 alpha=0.772
+
+FAST_ONLY
+k= 2 acc=0.6924±0.0276 gain=+0.1916 clean=0.7440 gradBC=1.707e-01 cond=4.714e-01 releaseA=+0.863 alpha=1.000
+k= 4 acc=0.6669±0.0701 gain=+0.1661 clean=0.8018 gradBC=1.510e-01 cond=4.714e-01 releaseA=+0.841 alpha=1.000
+k= 8 acc=0.6905±0.0327 gain=+0.1897 clean=0.7208 gradBC=1.416e-01 cond=4.714e-01 releaseA=+0.886 alpha=1.000
+k=16 acc=0.6907±0.0334 gain=+0.1899 clean=0.7304 gradBC=1.378e-01 cond=4.714e-01 releaseA=+0.883 alpha=1.000
+k=32 acc=0.6986±0.0259 gain=+0.1978 clean=0.7158 gradBC=1.371e-01 cond=4.714e-01 releaseA=+0.886 alpha=1.000
+
+ORACLE
+k= 2 acc=0.6878±0.0257 gain=+0.1870 clean=0.7396 gradBC=1.707e-01 cond=4.714e-01 releaseA=+0.860 alpha=1.000
+k= 4 acc=0.6669±0.0701 gain=+0.1661 clean=0.8016 gradBC=1.510e-01 cond=4.714e-01 releaseA=+0.850 alpha=1.000
+k= 8 acc=0.6905±0.0327 gain=+0.1897 clean=0.6916 gradBC=1.416e-01 cond=4.714e-01 releaseA=+0.896 alpha=1.000
+k=16 acc=0.6874±0.0316 gain=+0.1866 clean=0.7298 gradBC=1.378e-01 cond=4.714e-01 releaseA=+0.890 alpha=1.000
+k=32 acc=0.6932±0.0318 gain=+0.1924 clean=0.7008 gradBC=1.371e-01 cond=4.714e-01 releaseA=+0.896 alpha=1.000
+
+BEST K PER NON-ORACLE METHOD
+fast_only       k=32 acc=0.6986 gain=+0.1978 gradBC=1.371e-01 cond=4.714e-01 clean=0.7158
+slow_sgd        k= 8 acc=0.6302 gain=+0.1294 gradBC=1.078e-02 cond=1.411e-01 clean=0.9226
+additive_fast   k= 8 acc=0.6302 gain=+0.1294 gradBC=7.133e-02 cond=1.411e-01 clean=0.8668
+mixture_learned k= 4 acc=0.6070 gain=+0.1062 gradBC=1.699e-02 cond=4.714e-02 clean=0.9974
+mixture_fixed   k=32 acc=0.5657 gain=+0.0649 gradBC=6.853e-02 cond=2.357e-01 clean=1.0000
