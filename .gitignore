@@ -1,0 +1,9 @@
+.DS_Store
+._*
+__MACOSX/
+.venv/
+__pycache__/
+*.py[cod]
+smoke_results/
+release-assets/
+
