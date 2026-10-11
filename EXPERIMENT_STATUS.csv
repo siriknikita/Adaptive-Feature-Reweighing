@@ -1,0 +1,9 @@
+experiment,branch,tag,status,headline
+0,research/exp-00-dormant-feature-prototype,v0.0.0,reported-only,"Adaptive 4-shot accuracy reported as 0.9800"
+1,research/exp-01-overly-easy-image-world,v0.1.0,negative-result,"All methods 1.0000; world too easy"
+2,research/exp-02-fragile-dominance,v0.2.0,complete,"Adaptive K=8 glasses 0.6302 ± 0.1064"
+3,research/exp-03-gradient-recoverability,v0.3.0,complete,"Output anti-collapse did not restore gradient access"
+4,research/exp-04-independent-fast-path,v0.4.0,complete,"Fast-only K=32 glasses 0.6986 ± 0.0259; clean 0.7158"
+5,research/exp-05-selective-activation,v0.5.0,complete,"Memory switch K=32 glasses 0.6986 ± 0.0259; clean 1.0000; H=0.8223"
+6,research/exp-06-real-data-bridge,v0.6.0,code-only,"T4 bridge validated structurally; no result archive"
+

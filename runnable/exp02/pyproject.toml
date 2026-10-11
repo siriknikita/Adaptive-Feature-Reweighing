@@ -1,0 +1,15 @@
+
+[project]
+name = "adaptive-feature-reweighting-exp2"
+version = "0.2.0"
+description = "Experiment #2: can a model rediscover neglected evidence after a dominant feature fails?"
+requires-python = ">=3.11"
+dependencies = [
+  "torch>=2.3",
+  "torchvision>=0.18",
+  "numpy>=1.26",
+  "pillow>=10.0",
+]
+
+[tool.uv]
+package = false

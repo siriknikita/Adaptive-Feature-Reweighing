@@ -1,0 +1,9 @@
+[project]
+name = "adaptive-feature-reweighting-exp1"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = ["torch>=2.3", "torchvision>=0.18", "numpy>=1.26", "pillow>=10.0"]
+
+[tool.uv]
+package = false
+

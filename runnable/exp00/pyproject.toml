@@ -1,0 +1,9 @@
+[project]
+name = "adaptive-feature-reweighting-prototype"
+version = "0.0.0"
+requires-python = ">=3.11"
+dependencies = ["torch>=2.3", "numpy>=1.26", "pandas>=2.0", "scikit-learn>=1.4"]
+
+[tool.uv]
+package = false
+
